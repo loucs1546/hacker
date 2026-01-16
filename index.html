@@ -1,265 +1,228 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.3">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #000000; -webkit-text-stroke: #2e61b6; background-color: #ffffff}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #000000; -webkit-text-stroke: #6dc0ff; background-color: #ffffff}
-    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #000000; -webkit-text-stroke: #a2543f; background-color: #ffffff}
-    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #000000; -webkit-text-stroke: #a7a7a5; background-color: #ffffff}
-    p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #000000; -webkit-text-stroke: #b2b2b0; background-color: #ffffff}
-    p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #000000; -webkit-text-stroke: #396826; background-color: #ffffff}
-    p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #000000; -webkit-text-stroke: #a7a7a5; background-color: #ffffff; min-height: 16.0px}
-    p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #000000; -webkit-text-stroke: #b18c44; background-color: #ffffff}
-    p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #000000; -webkit-text-stroke: #953f93; background-color: #ffffff}
-    p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #000000; -webkit-text-stroke: #bec573; background-color: #ffffff}
-    p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #000000; -webkit-text-stroke: #3093ff; background-color: #ffffff}
-    span.s1 {font-kerning: none; -webkit-text-stroke: 0px #484848}
-    span.s2 {font-kerning: none}
-    span.s3 {font-kerning: none; -webkit-text-stroke: 0px #a7a7a5}
-    span.s4 {font-kerning: none; -webkit-text-stroke: 0px #6dc0ff}
-    span.s5 {font-kerning: none; -webkit-text-stroke: 0px #a2543f}
-    span.s6 {font-kerning: none; -webkit-text-stroke: 0px #2e61b6}
-    span.s7 {font-kerning: none; -webkit-text-stroke: 0px #87af72}
-    span.s8 {font-kerning: none; -webkit-text-stroke: 0px #b2b2b0}
-    span.s9 {font-kerning: none; -webkit-text-stroke: 0px #b18c44}
-    span.s10 {font-kerning: none; -webkit-text-stroke: 0px #bec573}
-    span.s11 {font-kerning: none; -webkit-text-stroke: 0px #3093ff}
-    span.s12 {font-kerning: none; -webkit-text-stroke: 0px #953f93}
+<!DOCTYPE html>
+<html lang="fr">
+<head> 
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HACKING SIMULATION v3.0</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      cursor: none; /* Cache la souris pour plus d'immersion */
+    }
+
+    body {
+      background: #000;
+      overflow: hidden;
+      font-family: 'Courier New', monospace;
+      color: #00ff41;
+      position: relative;
+      height: 100vh;
+    }
+
+    /* Fond binaire animé (effet 3D) */
+    #binary-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      perspective: 1000px;
+      transform-style: preserve-3d;
+    }
+
+    .binary-line {
+      position: absolute;
+      white-space: pre;
+      font-size: 16px;
+      opacity: 0.5;
+      text-shadow: 0 0 2px #00ff41;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      from { transform: translateY(-100vh); }
+      to { transform: translateY(100vh); }
+    }
+
+    /* Fenêtre centrale */
+    .hacking-window {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 70vw;
+      max-width: 800px;
+      background: rgba(0, 0, 0, 0.85);
+      border: 2px solid #00ff41;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 0 20px #00ff41;
+      z-index: 10;
+      backdrop-filter: blur(5px);
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 20px #00ff41; }
+      50% { box-shadow: 0 0 30px #00ff41; }
+      100% { box-shadow: 0 0 20px #00ff41; }
+    }
+
+    .status-text {
+      font-size: 24px;
+      text-align: center;
+      margin-bottom: 20px;
+      letter-spacing: 2px;
+      text-shadow: 0 0 5px #00ff41;
+      animation: blinkText 1s ease-in-out infinite;
+    }
+
+    @keyframes blinkText {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .progress-bar {
+      width: 80%;
+      margin: 20px auto;
+      height: 12px;
+      background: #001a00;
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: inset 0 0 5px #00ff41;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(to right, #00ff41, #00cc33);
+      width: 0%;
+      transition: width 0.3s ease-out;
+      box-shadow: 0 0 10px #00ff41;
+      animation: glow 1.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from { box-shadow: 0 0 5px #00ff41; }
+      to { box-shadow: 0 0 15px #00ff41; }
+    }
+
+    .completion-message {
+      font-size: 28px;
+      text-align: center;
+      margin-top: 20px;
+      color: #00ff41;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      text-shadow: 0 0 10px #00ff41;
+    }
+
+    .glow {
+      text-shadow: 0 0 10px #00ff41;
+      animation: glowPulse 1s ease-in-out infinite alternate;
+    }
+
+    @keyframes glowPulse {
+      from { text-shadow: 0 0 5px #00ff41; }
+      to { text-shadow: 0 0 20px #00ff41; }
+    }
   </style>
 </head>
 <body>
-<p class="p1"><span class="s1">&lt;!</span><span class="s2">DOCTYPE</span><span class="s3"> </span><span class="s4">html</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1">&lt;</span><span class="s2">html</span><span class="s3"> </span><span class="s4">lang</span><span class="s3">=</span><span class="s5">"fr"</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1">&lt;</span><span class="s2">head</span><span class="s1">&gt;<span class="Apple-converted-space"> </span></span></p>
-<p class="p2"><span class="s3"><span class="Apple-converted-space">  </span></span><span class="s1">&lt;</span><span class="s6">meta</span><span class="s3"> </span><span class="s2">charset</span><span class="s3">=</span><span class="s5">"UTF-8"</span><span class="s3"> </span><span class="s1">/&gt;</span></p>
-<p class="p3"><span class="s3"><span class="Apple-converted-space">  </span></span><span class="s1">&lt;</span><span class="s6">meta</span><span class="s3"> </span><span class="s4">name</span><span class="s3">=</span><span class="s2">"viewport"</span><span class="s3"> </span><span class="s4">content</span><span class="s3">=</span><span class="s2">"width=device-width, initial-scale=1.0"</span><span class="s1">/&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">  </span></span><span class="s1">&lt;</span><span class="s6">title</span><span class="s1">&gt;</span><span class="s2">HACKING SIMULATION v3.0</span><span class="s1">&lt;/</span><span class="s6">title</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s3"><span class="Apple-converted-space">  </span></span><span class="s1">&lt;</span><span class="s2">style</span><span class="s1">&gt;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s6">*</span><span class="s2"> {</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">margin</span><span class="s2">: </span><span class="s7">0</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">padding</span><span class="s2">: </span><span class="s7">0</span><span class="s2">;</span></p>
-<p class="p2"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s2">box-sizing</span><span class="s8">: </span><span class="s5">border-box</span><span class="s8">;</span></p>
-<p class="p6"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s4">cursor</span><span class="s8">: </span><span class="s5">none</span><span class="s8">; </span><span class="s2">/* Cache la souris pour plus d'immersion */</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s9">body</span><span class="s2"> {</span></p>
-<p class="p2"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s2">background</span><span class="s8">: </span><span class="s5">#000</span><span class="s8">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">overflow</span><span class="s2">: </span><span class="s5">hidden</span><span class="s2">;</span></p>
-<p class="p3"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s4">font-family</span><span class="s8">: </span><span class="s2">'Courier New'</span><span class="s8">, </span><span class="s2">monospace</span><span class="s8">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">color</span><span class="s2">: </span><span class="s5">#00ff41</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">position</span><span class="s2">: </span><span class="s5">relative</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">height</span><span class="s2">: </span><span class="s7">100vh</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p6"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s2">/* Fond binaire animé (effet 3D) */</span></p>
-<p class="p8"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s2">#binary-bg</span><span class="s8"> {</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">position</span><span class="s2">: </span><span class="s5">absolute</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">top</span><span class="s2">: </span><span class="s7">0</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">left</span><span class="s2">: </span><span class="s7">0</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">width</span><span class="s2">: </span><span class="s7">100%</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">height</span><span class="s2">: </span><span class="s7">100%</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">z-index</span><span class="s2">: </span><span class="s7">-1</span><span class="s2">;</span></p>
-<p class="p2"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s2">perspective</span><span class="s8">: </span><span class="s7">1000px</span><span class="s8">;</span></p>
-<p class="p2"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s2">transform-style</span><span class="s8">: </span><span class="s5">preserve-3d</span><span class="s8">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p8"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s2">.binary-line</span><span class="s8"> {</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">position</span><span class="s2">: </span><span class="s5">absolute</span><span class="s2">;</span></p>
-<p class="p2"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s2">white-space</span><span class="s8">: </span><span class="s5">pre</span><span class="s8">;</span></p>
-<p class="p2"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s2">font-size</span><span class="s8">: </span><span class="s7">16px</span><span class="s8">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">opacity</span><span class="s2">: </span><span class="s7">0.5</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">text-shadow</span><span class="s2">: </span><span class="s7">0</span><span class="s2"> </span><span class="s7">0</span><span class="s2"> </span><span class="s7">2px</span><span class="s2"> </span><span class="s5">#00ff41</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">animation</span><span class="s2">: fall </span><span class="s5">linear</span><span class="s2"> </span><span class="s5">infinite</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p9"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s2">@keyframes</span><span class="s8"> </span><span class="s4">fall</span><span class="s8"> {</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span>from { </span><span class="s4">transform</span><span class="s2">: </span><span class="s10">translateY</span><span class="s2">(</span><span class="s7">-100vh</span><span class="s2">); }</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span>to { </span><span class="s4">transform</span><span class="s2">: </span><span class="s10">translateY</span><span class="s2">(</span><span class="s7">100vh</span><span class="s2">); }</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p6"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s2">/* Fenêtre centrale */</span></p>
-<p class="p8"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s2">.hacking-window</span><span class="s8"> {</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">position</span><span class="s2">: </span><span class="s5">absolute</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">top</span><span class="s2">: </span><span class="s7">50%</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">left</span><span class="s2">: </span><span class="s7">50%</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">transform</span><span class="s2">: </span><span class="s10">translate</span><span class="s2">(</span><span class="s7">-50%</span><span class="s2">, </span><span class="s7">-50%</span><span class="s2">);</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">width</span><span class="s2">: </span><span class="s7">70vw</span><span class="s2">;</span></p>
-<p class="p2"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s2">max-width</span><span class="s8">: </span><span class="s7">800px</span><span class="s8">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">background</span><span class="s2">: </span><span class="s10">rgba</span><span class="s2">(</span><span class="s7">0</span><span class="s2">, </span><span class="s7">0</span><span class="s2">, </span><span class="s7">0</span><span class="s2">, </span><span class="s7">0.85</span><span class="s2">);</span></p>
-<p class="p3"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s4">border</span><span class="s8">: </span><span class="s7">2px</span><span class="s8"> </span><span class="s2">solid</span><span class="s8"> </span><span class="s2">#00ff41</span><span class="s8">;</span></p>
-<p class="p2"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s2">border-radius</span><span class="s8">: </span><span class="s7">8px</span><span class="s8">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">padding</span><span class="s2">: </span><span class="s7">20px</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">box-shadow</span><span class="s2">: </span><span class="s7">0</span><span class="s2"> </span><span class="s7">0</span><span class="s2"> </span><span class="s7">20px</span><span class="s2"> </span><span class="s5">#00ff41</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">z-index</span><span class="s2">: </span><span class="s7">10</span><span class="s2">;</span></p>
-<p class="p2"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s2">backdrop-filter</span><span class="s8">: </span><span class="s10">blur</span><span class="s8">(</span><span class="s7">5px</span><span class="s8">);</span></p>
-<p class="p3"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s4">animation</span><span class="s8">: pulse </span><span class="s7">3s</span><span class="s8"> </span><span class="s2">ease-in-out</span><span class="s8"> </span><span class="s2">infinite</span><span class="s8">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p9"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s2">@keyframes</span><span class="s8"> </span><span class="s4">pulse</span><span class="s8"> {</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span>0% { </span><span class="s4">box-shadow</span><span class="s2">: </span><span class="s7">0</span><span class="s2"> </span><span class="s7">0</span><span class="s2"> </span><span class="s7">20px</span><span class="s2"> </span><span class="s5">#00ff41</span><span class="s2">; }</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span>50% { </span><span class="s4">box-shadow</span><span class="s2">: </span><span class="s7">0</span><span class="s2"> </span><span class="s7">0</span><span class="s2"> </span><span class="s7">30px</span><span class="s2"> </span><span class="s5">#00ff41</span><span class="s2">; }</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span>100% { </span><span class="s4">box-shadow</span><span class="s2">: </span><span class="s7">0</span><span class="s2"> </span><span class="s7">0</span><span class="s2"> </span><span class="s7">20px</span><span class="s2"> </span><span class="s5">#00ff41</span><span class="s2">; }</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p8"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s2">.status-text</span><span class="s8"> {</span></p>
-<p class="p2"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s2">font-size</span><span class="s8">: </span><span class="s7">24px</span><span class="s8">;</span></p>
-<p class="p2"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s2">text-align</span><span class="s8">: </span><span class="s5">center</span><span class="s8">;</span></p>
-<p class="p2"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s2">margin-bottom</span><span class="s8">: </span><span class="s7">20px</span><span class="s8">;</span></p>
-<p class="p2"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s2">letter-spacing</span><span class="s8">: </span><span class="s7">2px</span><span class="s8">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">text-shadow</span><span class="s2">: </span><span class="s7">0</span><span class="s2"> </span><span class="s7">0</span><span class="s2"> </span><span class="s7">5px</span><span class="s2"> </span><span class="s5">#00ff41</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">animation</span><span class="s2">: blinkText </span><span class="s7">1s</span><span class="s2"> </span><span class="s5">ease-in-out</span><span class="s2"> </span><span class="s5">infinite</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p9"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s2">@keyframes</span><span class="s8"> </span><span class="s4">blinkText</span><span class="s8"> {</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span>0%, 100% { </span><span class="s4">opacity</span><span class="s2">: </span><span class="s7">1</span><span class="s2">; }</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span>50% { </span><span class="s4">opacity</span><span class="s2">: </span><span class="s7">0.7</span><span class="s2">; }</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p8"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s2">.progress-bar</span><span class="s8"> {</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">width</span><span class="s2">: </span><span class="s7">80%</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">margin</span><span class="s2">: </span><span class="s7">20px</span><span class="s2"> </span><span class="s5">auto</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">height</span><span class="s2">: </span><span class="s7">12px</span><span class="s2">;</span></p>
-<p class="p2"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s2">background</span><span class="s8">: </span><span class="s5">#001a00</span><span class="s8">;</span></p>
-<p class="p2"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s2">border-radius</span><span class="s8">: </span><span class="s7">6px</span><span class="s8">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">overflow</span><span class="s2">: </span><span class="s5">hidden</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">position</span><span class="s2">: </span><span class="s5">relative</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">box-shadow</span><span class="s2">: </span><span class="s5">inset</span><span class="s2"> </span><span class="s7">0</span><span class="s2"> </span><span class="s7">0</span><span class="s2"> </span><span class="s7">5px</span><span class="s2"> </span><span class="s5">#00ff41</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p8"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s2">.progress-fill</span><span class="s8"> {</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">height</span><span class="s2">: </span><span class="s7">100%</span><span class="s2">;</span></p>
-<p class="p3"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s4">background</span><span class="s8">: </span><span class="s10">linear-gradient</span><span class="s8">(to </span><span class="s2">right</span><span class="s8">, </span><span class="s2">#00ff41</span><span class="s8">, </span><span class="s2">#00cc33</span><span class="s8">);</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">width</span><span class="s2">: </span><span class="s7">0%</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">transition</span><span class="s2">: width </span><span class="s7">0.3s</span><span class="s2"> </span><span class="s5">ease-out</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">box-shadow</span><span class="s2">: </span><span class="s7">0</span><span class="s2"> </span><span class="s7">0</span><span class="s2"> </span><span class="s7">10px</span><span class="s2"> </span><span class="s5">#00ff41</span><span class="s2">;</span></p>
-<p class="p3"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s4">animation</span><span class="s8">: glow </span><span class="s7">1.5s</span><span class="s8"> </span><span class="s2">ease-in-out</span><span class="s8"> </span><span class="s2">infinite</span><span class="s8"> </span><span class="s2">alternate</span><span class="s8">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p9"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s2">@keyframes</span><span class="s8"> </span><span class="s4">glow</span><span class="s8"> {</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span>from { </span><span class="s4">box-shadow</span><span class="s2">: </span><span class="s7">0</span><span class="s2"> </span><span class="s7">0</span><span class="s2"> </span><span class="s7">5px</span><span class="s2"> </span><span class="s5">#00ff41</span><span class="s2">; }</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span>to { </span><span class="s4">box-shadow</span><span class="s2">: </span><span class="s7">0</span><span class="s2"> </span><span class="s7">0</span><span class="s2"> </span><span class="s7">15px</span><span class="s2"> </span><span class="s5">#00ff41</span><span class="s2">; }</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p8"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s2">.completion-message</span><span class="s8"> {</span></p>
-<p class="p2"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s2">font-size</span><span class="s8">: </span><span class="s7">28px</span><span class="s8">;</span></p>
-<p class="p2"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s2">text-align</span><span class="s8">: </span><span class="s5">center</span><span class="s8">;</span></p>
-<p class="p2"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s2">margin-top</span><span class="s8">: </span><span class="s7">20px</span><span class="s8">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">color</span><span class="s2">: </span><span class="s5">#00ff41</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">opacity</span><span class="s2">: </span><span class="s7">0</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">transition</span><span class="s2">: opacity </span><span class="s7">1s</span><span class="s2"> </span><span class="s5">ease-in-out</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">text-shadow</span><span class="s2">: </span><span class="s7">0</span><span class="s2"> </span><span class="s7">0</span><span class="s2"> </span><span class="s7">10px</span><span class="s2"> </span><span class="s5">#00ff41</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s9">.glow</span><span class="s2"> {</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s4">text-shadow</span><span class="s2">: </span><span class="s7">0</span><span class="s2"> </span><span class="s7">0</span><span class="s2"> </span><span class="s7">10px</span><span class="s2"> </span><span class="s5">#00ff41</span><span class="s2">;</span></p>
-<p class="p3"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s4">animation</span><span class="s8">: glowPulse </span><span class="s7">1s</span><span class="s8"> </span><span class="s2">ease-in-out</span><span class="s8"> </span><span class="s2">infinite</span><span class="s8"> </span><span class="s2">alternate</span><span class="s8">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p9"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s2">@keyframes</span><span class="s8"> </span><span class="s4">glowPulse</span><span class="s8"> {</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span>from { </span><span class="s4">text-shadow</span><span class="s2">: </span><span class="s7">0</span><span class="s2"> </span><span class="s7">0</span><span class="s2"> </span><span class="s7">5px</span><span class="s2"> </span><span class="s5">#00ff41</span><span class="s2">; }</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span>to { </span><span class="s4">text-shadow</span><span class="s2">: </span><span class="s7">0</span><span class="s2"> </span><span class="s7">0</span><span class="s2"> </span><span class="s7">20px</span><span class="s2"> </span><span class="s5">#00ff41</span><span class="s2">; }</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s8"><span class="Apple-converted-space">  </span></span><span class="s1">&lt;/</span><span class="s2">style</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/</span><span class="s2">head</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1">&lt;</span><span class="s2">body</span><span class="s1">&gt;</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p6"><span class="s3"><span class="Apple-converted-space">  </span></span><span class="s2">&lt;!-- Fond binaire --&gt;</span></p>
-<p class="p3"><span class="s3"><span class="Apple-converted-space">  </span></span><span class="s1">&lt;</span><span class="s6">div</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s2">"binary-bg"</span><span class="s1">&gt;&lt;/</span><span class="s6">div</span><span class="s1">&gt;</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p6"><span class="s3"><span class="Apple-converted-space">  </span></span><span class="s2">&lt;!-- Fenêtre centrale --&gt;</span></p>
-<p class="p3"><span class="s3"><span class="Apple-converted-space">  </span></span><span class="s1">&lt;</span><span class="s6">div</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s2">"hacking-window"</span><span class="s1">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;</span><span class="s6">div</span><span class="s2"> </span><span class="s4">class</span><span class="s2">=</span><span class="s5">"status-text"</span><span class="s2"> </span><span class="s4">id</span><span class="s2">=</span><span class="s5">"status"</span><span class="s1">&gt;</span><span class="s2">INITIALISATION DES DONNÉES...</span><span class="s1">&lt;/</span><span class="s6">div</span><span class="s1">&gt;</span></p>
-<p class="p3"><span class="s3"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;</span><span class="s6">div</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s2">"progress-bar"</span><span class="s1">&gt;</span></p>
-<p class="p3"><span class="s3"><span class="Apple-converted-space">      </span></span><span class="s1">&lt;</span><span class="s6">div</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s2">"progress-fill"</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s2">"progress"</span><span class="s1">&gt;&lt;/</span><span class="s6">div</span><span class="s1">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;/</span><span class="s6">div</span><span class="s1">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;</span><span class="s6">div</span><span class="s2"> </span><span class="s4">class</span><span class="s2">=</span><span class="s5">"completion-message"</span><span class="s2"> </span><span class="s4">id</span><span class="s2">=</span><span class="s5">"complete"</span><span class="s1">&gt;</span><span class="s2">INITIALISATION TERMINÉE.</span><span class="s1">&lt;/</span><span class="s6">div</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s3"><span class="Apple-converted-space">  </span></span><span class="s1">&lt;/</span><span class="s2">div</span><span class="s1">&gt;</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p1"><span class="s3"><span class="Apple-converted-space">  </span></span><span class="s1">&lt;</span><span class="s2">script</span><span class="s1">&gt;</span></p>
-<p class="p6"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s2">// ======================</span></p>
-<p class="p6"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s2">// GÉNÉRATION DU FOND BINAIRE</span></p>
-<p class="p6"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s2">// ======================</span></p>
-<p class="p10"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s6">const</span><span class="s8"> </span><span class="s11">binaryBg</span><span class="s8"> = </span><span class="s4">document</span><span class="s8">.</span><span class="s2">getElementById</span><span class="s8">(</span><span class="s5">'binary-bg'</span><span class="s8">);</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s6">const</span><span class="s2"> </span><span class="s11">chars</span><span class="s2"> = </span><span class="s5">'01'</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s6">const</span><span class="s2"> </span><span class="s11">lines</span><span class="s2"> = </span><span class="s7">50</span><span class="s2">;</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s12">for</span><span class="s2"> (</span><span class="s6">let</span><span class="s2"> </span><span class="s4">i</span><span class="s2"> = </span><span class="s7">0</span><span class="s2">; </span><span class="s4">i</span><span class="s2"> &lt; </span><span class="s11">lines</span><span class="s2">; </span><span class="s4">i</span><span class="s2">++) {</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s6">const</span><span class="s2"> </span><span class="s11">line</span><span class="s2"> = </span><span class="s4">document</span><span class="s2">.</span><span class="s10">createElement</span><span class="s2">(</span><span class="s5">'div'</span><span class="s2">);</span></p>
-<p class="p3"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s11">line</span><span class="s8">.</span><span class="s4">className</span><span class="s8"> = </span><span class="s2">'binary-line'</span><span class="s8">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s11">line</span><span class="s2">.</span><span class="s4">style</span><span class="s2">.</span><span class="s4">top</span><span class="s2"> = </span><span class="s5">`</span><span class="s6">${</span><span class="s4">Math</span><span class="s2">.</span><span class="s10">random</span><span class="s2">() * </span><span class="s7">100</span><span class="s6">}</span><span class="s5">%`</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s11">line</span><span class="s2">.</span><span class="s4">style</span><span class="s2">.</span><span class="s4">left</span><span class="s2"> = </span><span class="s5">`</span><span class="s6">${</span><span class="s4">Math</span><span class="s2">.</span><span class="s10">random</span><span class="s2">() * </span><span class="s7">100</span><span class="s6">}</span><span class="s5">%`</span><span class="s2">;</span></p>
-<p class="p2"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s11">line</span><span class="s8">.</span><span class="s2">style</span><span class="s8">.</span><span class="s2">animationDuration</span><span class="s8"> = </span><span class="s5">`</span><span class="s6">${</span><span class="s2">Math</span><span class="s8">.</span><span class="s10">random</span><span class="s8">() * </span><span class="s7">10</span><span class="s8"> + </span><span class="s7">5</span><span class="s6">}</span><span class="s5">s`</span><span class="s8">;</span></p>
-<p class="p2"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s11">line</span><span class="s8">.</span><span class="s2">style</span><span class="s8">.</span><span class="s2">animationDelay</span><span class="s8"> = </span><span class="s5">`</span><span class="s6">${</span><span class="s2">Math</span><span class="s8">.</span><span class="s10">random</span><span class="s8">() * </span><span class="s7">5</span><span class="s6">}</span><span class="s5">s`</span><span class="s8">;</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s6">let</span><span class="s2"> </span><span class="s4">text</span><span class="s2"> = </span><span class="s5">''</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s12">for</span><span class="s2"> (</span><span class="s6">let</span><span class="s2"> </span><span class="s4">j</span><span class="s2"> = </span><span class="s7">0</span><span class="s2">; </span><span class="s4">j</span><span class="s2"> &lt; </span><span class="s7">80</span><span class="s2">; </span><span class="s4">j</span><span class="s2">++) {</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s4">text</span><span class="s2"> += </span><span class="s11">chars</span><span class="s2">[</span><span class="s4">Math</span><span class="s2">.</span><span class="s10">floor</span><span class="s2">(</span><span class="s4">Math</span><span class="s2">.</span><span class="s10">random</span><span class="s2">() * </span><span class="s7">2</span><span class="s2">)];</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span>}</span></p>
-<p class="p2"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s11">line</span><span class="s8">.</span><span class="s2">textContent</span><span class="s8"> = </span><span class="s2">text</span><span class="s8">;</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p11"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s2">binaryBg</span><span class="s8">.</span><span class="s10">appendChild</span><span class="s8">(</span><span class="s2">line</span><span class="s8">);</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p6"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s2">// ======================</span></p>
-<p class="p6"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s2">// ANIMATION DE LA BARRE ET DU TEXTE</span></p>
-<p class="p6"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s2">// ======================</span></p>
-<p class="p10"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s6">const</span><span class="s8"> </span><span class="s11">statusEl</span><span class="s8"> = </span><span class="s4">document</span><span class="s8">.</span><span class="s2">getElementById</span><span class="s8">(</span><span class="s5">'status'</span><span class="s8">);</span></p>
-<p class="p10"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s6">const</span><span class="s8"> </span><span class="s11">progressEl</span><span class="s8"> = </span><span class="s4">document</span><span class="s8">.</span><span class="s2">getElementById</span><span class="s8">(</span><span class="s5">'progress'</span><span class="s8">);</span></p>
-<p class="p10"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s6">const</span><span class="s8"> </span><span class="s11">completeEl</span><span class="s8"> = </span><span class="s4">document</span><span class="s8">.</span><span class="s2">getElementById</span><span class="s8">(</span><span class="s5">'complete'</span><span class="s8">);</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s6">let</span><span class="s2"> </span><span class="s4">progress</span><span class="s2"> = </span><span class="s7">0</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s6">const</span><span class="s2"> </span><span class="s11">interval</span><span class="s2"> = </span><span class="s10">setInterval</span><span class="s2">(() </span><span class="s6">=&gt;</span><span class="s2"> {</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s12">if</span><span class="s2"> (</span><span class="s4">progress</span><span class="s2"> &lt; </span><span class="s7">100</span><span class="s2">) {</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s4">progress</span><span class="s2"> += </span><span class="s4">Math</span><span class="s2">.</span><span class="s10">random</span><span class="s2">() * </span><span class="s7">3</span><span class="s2"> + </span><span class="s7">0.5</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s12">if</span><span class="s2"> (</span><span class="s4">progress</span><span class="s2"> &gt; </span><span class="s7">100</span><span class="s2">) </span><span class="s4">progress</span><span class="s2"> = </span><span class="s7">100</span><span class="s2">;</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p2"><span class="s8"><span class="Apple-converted-space">        </span></span><span class="s11">progressEl</span><span class="s8">.</span><span class="s2">style</span><span class="s8">.</span><span class="s2">width</span><span class="s8"> = </span><span class="s5">`</span><span class="s6">${</span><span class="s2">progress</span><span class="s6">}</span><span class="s5">%`</span><span class="s8">;</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s12">if</span><span class="s2"> (</span><span class="s4">progress</span><span class="s2"> &lt; </span><span class="s7">30</span><span class="s2">) {</span></p>
-<p class="p3"><span class="s8"><span class="Apple-converted-space">          </span></span><span class="s11">statusEl</span><span class="s8">.</span><span class="s4">textContent</span><span class="s8"> = </span><span class="s2">"INITIALISATION DES DONNÉES..."</span><span class="s8">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">        </span>} </span><span class="s12">else</span><span class="s2"> </span><span class="s12">if</span><span class="s2"> (</span><span class="s4">progress</span><span class="s2"> &lt; </span><span class="s7">70</span><span class="s2">) {</span></p>
-<p class="p3"><span class="s8"><span class="Apple-converted-space">          </span></span><span class="s11">statusEl</span><span class="s8">.</span><span class="s4">textContent</span><span class="s8"> = </span><span class="s2">"CHARGEMENT EN COURS..."</span><span class="s8">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">        </span>} </span><span class="s12">else</span><span class="s2"> {</span></p>
-<p class="p3"><span class="s8"><span class="Apple-converted-space">          </span></span><span class="s11">statusEl</span><span class="s8">.</span><span class="s4">textContent</span><span class="s8"> = </span><span class="s2">"FINALISATION..."</span><span class="s8">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span>} </span><span class="s12">else</span><span class="s2"> {</span></p>
-<p class="p10"><span class="s8"><span class="Apple-converted-space">        </span></span><span class="s2">clearInterval</span><span class="s8">(</span><span class="s11">interval</span><span class="s8">);</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s11">statusEl</span><span class="s2">.</span><span class="s4">textContent</span><span class="s2"> = </span><span class="s5">"TERMINÉ"</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s11">statusEl</span><span class="s2">.</span><span class="s4">classList</span><span class="s2">.</span><span class="s10">add</span><span class="s2">(</span><span class="s5">'glow'</span><span class="s2">);</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s11">completeEl</span><span class="s2">.</span><span class="s4">style</span><span class="s2">.</span><span class="s4">opacity</span><span class="s2"> = </span><span class="s7">1</span><span class="s2">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s10">setTimeout</span><span class="s2">(() </span><span class="s6">=&gt;</span><span class="s2"> {</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">          </span></span><span class="s11">completeEl</span><span class="s2">.</span><span class="s4">classList</span><span class="s2">.</span><span class="s10">add</span><span class="s2">(</span><span class="s5">'glow'</span><span class="s2">);</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">        </span>}, </span><span class="s7">500</span><span class="s2">);</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span>}</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span>}, </span><span class="s7">150</span><span class="s2">);</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p6"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s2">// ======================</span></p>
-<p class="p6"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s2">// EFFET DE PULSATION SUR LA FENÊTRE</span></p>
-<p class="p6"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s2">// ======================</span></p>
-<p class="p10"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s4">document</span><span class="s8">.</span><span class="s2">querySelector</span><span class="s8">(</span><span class="s5">'.hacking-window'</span><span class="s8">).</span><span class="s2">addEventListener</span><span class="s8">(</span><span class="s5">'mouseenter'</span><span class="s8">, () </span><span class="s6">=&gt;</span><span class="s8"> {</span></p>
-<p class="p3"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s4">document</span><span class="s8">.</span><span class="s10">querySelector</span><span class="s8">(</span><span class="s2">'.hacking-window'</span><span class="s8">).</span><span class="s4">style</span><span class="s8">.</span><span class="s4">boxShadow</span><span class="s8"> = </span><span class="s2">'0 0 40px #00ff41'</span><span class="s8">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span>});</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p10"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s4">document</span><span class="s8">.</span><span class="s2">querySelector</span><span class="s8">(</span><span class="s5">'.hacking-window'</span><span class="s8">).</span><span class="s2">addEventListener</span><span class="s8">(</span><span class="s5">'mouseleave'</span><span class="s8">, () </span><span class="s6">=&gt;</span><span class="s8"> {</span></p>
-<p class="p3"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s4">document</span><span class="s8">.</span><span class="s10">querySelector</span><span class="s8">(</span><span class="s2">'.hacking-window'</span><span class="s8">).</span><span class="s4">style</span><span class="s8">.</span><span class="s4">boxShadow</span><span class="s8"> = </span><span class="s2">'0 0 20px #00ff41'</span><span class="s8">;</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span>});</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p6"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s2">// ======================</span></p>
-<p class="p6"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s2">// PLEIN ÉCRAN AU CHARGEMENT</span></p>
-<p class="p6"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s2">// ======================</span></p>
-<p class="p10"><span class="s8"><span class="Apple-converted-space">    </span></span><span class="s4">window</span><span class="s8">.</span><span class="s2">addEventListener</span><span class="s8">(</span><span class="s5">'load'</span><span class="s8">, () </span><span class="s6">=&gt;</span><span class="s8"> {</span></p>
-<p class="p2"><span class="s8"><span class="Apple-converted-space">      </span></span><span class="s12">if</span><span class="s8"> (</span><span class="s2">document</span><span class="s8">.</span><span class="s2">documentElement</span><span class="s8">.</span><span class="s10">requestFullscreen</span><span class="s8">) {</span></p>
-<p class="p2"><span class="s8"><span class="Apple-converted-space">        </span></span><span class="s2">document</span><span class="s8">.</span><span class="s2">documentElement</span><span class="s8">.</span><span class="s10">requestFullscreen</span><span class="s8">();</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">      </span>}</span></p>
-<p class="p5"><span class="s2"><span class="Apple-converted-space">    </span>});</span></p>
-<p class="p1"><span class="s8"><span class="Apple-converted-space">  </span></span><span class="s1">&lt;/</span><span class="s2">script</span><span class="s1">&gt;</span></p>
-<p class="p7"><span class="s2"></span><br></p>
-<p class="p1"><span class="s1">&lt;/</span><span class="s2">body</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/</span><span class="s2">html</span><span class="s1">&gt;</span></p>
+
+  <!-- Fond binaire -->
+  <div id="binary-bg"></div>
+
+  <!-- Fenêtre centrale -->
+  <div class="hacking-window">
+    <div class="status-text" id="status">INITIALISATION DES DONNÉES...</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress"></div>
+    </div>
+    <div class="completion-message" id="complete">INITIALISATION TERMINÉE.</div>
+  </div>
+
+  <script>
+    // ======================
+    // GÉNÉRATION DU FOND BINAIRE
+    // ======================
+    const binaryBg = document.getElementById('binary-bg');
+    const chars = '01';
+    const lines = 50;
+
+    for (let i = 0; i < lines; i++) {
+      const line = document.createElement('div');
+      line.className = 'binary-line';
+      line.style.top = `${Math.random() * 100}%`;
+      line.style.left = `${Math.random() * 100}%`;
+      line.style.animationDuration = `${Math.random() * 10 + 5}s`;
+      line.style.animationDelay = `${Math.random() * 5}s`;
+
+      let text = '';
+      for (let j = 0; j < 80; j++) {
+        text += chars[Math.floor(Math.random() * 2)];
+      }
+      line.textContent = text;
+
+      binaryBg.appendChild(line);
+    }
+
+    // ======================
+    // ANIMATION DE LA BARRE ET DU TEXTE
+    // ======================
+    const statusEl = document.getElementById('status');
+    const progressEl = document.getElementById('progress');
+    const completeEl = document.getElementById('complete');
+
+    let progress = 0;
+    const interval = setInterval(() => {
+      if (progress < 100) {
+        progress += Math.random() * 3 + 0.5;
+        if (progress > 100) progress = 100;
+
+        progressEl.style.width = `${progress}%`;
+
+        if (progress < 30) {
+          statusEl.textContent = "INITIALISATION DES DONNÉES...";
+        } else if (progress < 70) {
+          statusEl.textContent = "CHARGEMENT EN COURS...";
+        } else {
+          statusEl.textContent = "FINALISATION...";
+        }
+      } else {
+        clearInterval(interval);
+        statusEl.textContent = "TERMINÉ";
+        statusEl.classList.add('glow');
+        completeEl.style.opacity = 1;
+        setTimeout(() => {
+          completeEl.classList.add('glow');
+        }, 500);
+      }
+    }, 150);
+
+    // ======================
+    // EFFET DE PULSATION SUR LA FENÊTRE
+    // ======================
+    document.querySelector('.hacking-window').addEventListener('mouseenter', () => {
+      document.querySelector('.hacking-window').style.boxShadow = '0 0 40px #00ff41';
+    });
+
+    document.querySelector('.hacking-window').addEventListener('mouseleave', () => {
+      document.querySelector('.hacking-window').style.boxShadow = '0 0 20px #00ff41';
+    });
+
+    // ======================
+    // PLEIN ÉCRAN AU CHARGEMENT
+    // ======================
+    window.addEventListener('load', () => {
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
+      }
+    });
+  </script>
+
 </body>
 </html>
